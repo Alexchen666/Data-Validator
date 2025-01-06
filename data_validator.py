@@ -8,9 +8,9 @@ app = marimo.App(width="medium")
 def _(mo):
     mo.md(
         r"""
-        # 資料驗證
+        # Data Validator
 
-        ## 匯入欲進行驗證的資料
+        ## Import the csv file for validation
         """
     )
     return
@@ -36,7 +36,7 @@ def _(f, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""前五筆資料如下：""")
+    mo.md("""Below are the first five rows:""")
     return
 
 
@@ -47,19 +47,17 @@ def _(df):
 
 
 @app.cell
-def _():
-    # initial_code = """# implement class P below
-    # class P(pt.Model):
-    #     ...
-    # """
+def _(mo):
+    initial_code = """# implement class P below
+    class P(pt.Model):
+        ...
+    """
 
-    # editor = mo.ui.code_editor(
-    #     value=initial_code,
-    #     language='python'
-    # )
-
-    # editor
-    return
+    editor = mo.ui.code_editor(
+        value=initial_code,
+        language='python'
+    )
+    return editor, initial_code
 
 
 @app.cell
@@ -112,19 +110,51 @@ def _(create_column_config, df, dtype_mapping, mo):
 
 
 @app.cell
-def _(all_forms, mo):
-    run = mo.ui.run_button(label="Generate Model")
+def _(mo):
+    run_ui = mo.ui.run_button(label="Generate Model")
+    return (run_ui,)
 
+
+@app.cell
+def _(all_forms, mo, run_ui):
     # Combine all elements using mo.vstack
-    interface = mo.vstack([
+    interface_ui = mo.vstack([
         mo.md("""---
-        
-        ## 欄位設定
+
+        ## Column Configs (UI)
         """),
         *all_forms,
-        run,
+        run_ui,
     ])
-    return interface, run
+    return (interface_ui,)
+
+
+@app.cell
+def _(mo):
+    run_code = mo.ui.run_button(label="Run Code")
+    return (run_code,)
+
+
+@app.cell
+def _(editor, mo, run_code):
+    interface_code = mo.vstack([
+        mo.md("""---
+
+        ## Column Configs (Code)
+        """),
+        editor,
+        run_code,
+    ])
+    return (interface_code,)
+
+
+@app.cell
+def _(interface_code, interface_ui, mo):
+    interface = mo.ui.tabs({
+        'UI Config': interface_ui,
+        'Code Config': interface_code
+    })
+    return (interface,)
 
 
 @app.cell
@@ -175,10 +205,18 @@ def _(Dict):
 
 
 @app.cell(hide_code=True)
-def _(columns_config, df, generate_model_code, mo, run):
+def _(
+    columns_config,
+    df,
+    editor,
+    generate_model_code,
+    mo,
+    run_code,
+    run_ui,
+):
     code = ''
 
-    if run.value:
+    if run_ui.value:
         # Collect configurations
         configs = {}
         for col in df.columns:
@@ -197,6 +235,8 @@ def _(columns_config, df, generate_model_code, mo, run):
             }
 
         code = generate_model_code(configs)
+    elif run_code.value:
+        code = editor.value
 
     mo.md(f"""## Preview:
 
