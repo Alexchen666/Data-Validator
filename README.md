@@ -54,7 +54,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Note
-This is an early-stage project and the API may change. Please report any bugs or feature requests through the GitHub issues page.
+This is an early-stage side project and the API may change. Please report any bugs or feature requests through the GitHub issues page.
 
 ## Source of `test_data.csv`
 
