@@ -1,7 +1,7 @@
 # Data-Validator
 A simple UI-based data validator.
 
-## Test Data Source:
+## Source of Test Data
 
 https://github.com/allisonhorst/palmerpenguins/tree/main
 
