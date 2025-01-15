@@ -1,4 +1,4 @@
-# Data-Validator
+# Data Validator
 A user-friendly, interactive, UI-based data validation tool built with Marimo and Patito. Define your data validation rules using familiar Pydantic syntax and get instant feedback on your CSV data quality.
 
 ## Features
